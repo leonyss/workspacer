@@ -5,5 +5,5 @@
   "shell-version": ["45", "46", "47", "48"],
   "settings-schema": "org.gnome.shell.extensions.workspacer",
   "description": "Lomotion-inspired workspace and window control with fully configurable modifier keys.\n\nWorkspace navigation (configurable modifier):\n  Mod+A / Mod+S — previous / next workspace\n  Mod+D / Mod+F — move window to previous / next workspace\n  Mod+E         — cycle windows on current workspace\n\nWindow actions (separate configurable modifier, safe from text field conflicts):\n  Mod+Q — close window\n  Mod+H — minimize window\n\nAll modifier keys are changed live from the preferences page — no restart needed.",
-  "url": "https://github.com/egoralbutov/workspacer"
+  "url": "https://github.com/leonyss/workspacer"
 }
