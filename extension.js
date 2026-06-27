@@ -1,3 +1,4 @@
+import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -38,6 +39,7 @@ export default class WorkspacerExtension extends Extension {
         this._savedWmExtra = {};
         this._savedShell = {};
         this._capslockActive = false;
+        this._capturedId = null;
 
         this._applyModifier(
             this._settings.get_string('modifier-key'),
@@ -50,9 +52,11 @@ export default class WorkspacerExtension extends Extension {
                 this._settings.get_string('modifier-key'),
                 this._settings.get_string('window-modifier-key'),
             );
+            this._syncMouseButtons();
         });
 
         this._enableMiddleClickMinimize();
+        this._syncMouseButtons();
     }
 
     disable() {
@@ -62,6 +66,7 @@ export default class WorkspacerExtension extends Extension {
         }
         this._clearBindings();
         this._disableMiddleClickMinimize();
+        this._detachMouseButtons();
         this._settings = null;
     }
 
@@ -156,5 +161,47 @@ export default class WorkspacerExtension extends Extension {
         const arr = inputs.get_strv('xkb-options').filter(s => s !== 'caps:super');
         inputs.set_strv('xkb-options', arr);
         inputs.apply();
+    }
+
+    _syncMouseButtons() {
+        const enabled = this._settings.get_boolean('mouse-side-buttons');
+        if (enabled && this._capturedId === null) {
+            this._capturedId = global.stage.connect(
+                'captured-event',
+                this._onCapturedEvent.bind(this),
+            );
+        } else if (!enabled && this._capturedId !== null) {
+            global.stage.disconnect(this._capturedId);
+            this._capturedId = null;
+        }
+    }
+
+    _detachMouseButtons() {
+        if (this._capturedId !== null) {
+            global.stage.disconnect(this._capturedId);
+            this._capturedId = null;
+        }
+    }
+
+    _onCapturedEvent(_actor, event) {
+        if (event.type() !== Clutter.EventType.BUTTON_PRESS)
+            return Clutter.EVENT_PROPAGATE;
+
+        const button = event.get_button();
+        if (button !== 8 && button !== 9)
+            return Clutter.EVENT_PROPAGATE;
+
+        const wm = global.workspace_manager;
+        const current = wm.get_active_workspace_index();
+        const total = wm.n_workspaces;
+
+        const target = button === 8
+            ? Math.max(0, current - 1)
+            : Math.min(total - 1, current + 1);
+
+        if (target !== current)
+            wm.get_workspace_by_index(target).activate(global.get_current_time());
+
+        return Clutter.EVENT_STOP;
     }
 }

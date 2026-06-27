@@ -1,4 +1,5 @@
 import Adw from 'gi://Adw';
+import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -59,5 +60,16 @@ export default class WorkspacerPreferences extends ExtensionPreferences {
         for (const [key, desc] of bindings) {
             infoGroup.add(new Adw.ActionRow({ title: key, subtitle: desc }));
         }
+
+        const mouseGroup = new Adw.PreferencesGroup({ title: _('Mouse') });
+        page.add(mouseGroup);
+
+        const sideButtonsRow = new Adw.SwitchRow({
+            title: _('Side buttons switch workspaces'),
+            subtitle: _('Buttons 8 / 9 navigate workspaces globally. Overrides browser Back / Forward.'),
+        });
+        mouseGroup.add(sideButtonsRow);
+
+        settings.bind('mouse-side-buttons', sideButtonsRow, 'active', Gio.SettingsBindFlags.DEFAULT);
     }
 }

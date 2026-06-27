@@ -12,5 +12,10 @@
       <summary>Window modifier key</summary>
       <description>Modifier for close/minimize actions: 'lalt', 'super'</description>
     </key>
+    <key type="b" name="mouse-side-buttons">
+      <default>false</default>
+      <summary>Mouse side buttons workspace switching</summary>
+      <description>When enabled, mouse buttons 8 (back) and 9 (forward) switch between workspaces globally, overriding browser Back/Forward.</description>
+    </key>
   </schema>
 </schemalist>
