@@ -51,6 +51,8 @@ export default class WorkspacerExtension extends Extension {
                 this._settings.get_string('window-modifier-key'),
             );
         });
+
+        this._enableMiddleClickMinimize();
     }
 
     disable() {
@@ -59,6 +61,7 @@ export default class WorkspacerExtension extends Extension {
             this._changedId = null;
         }
         this._clearBindings();
+        this._disableMiddleClickMinimize();
         this._settings = null;
     }
 
@@ -118,6 +121,23 @@ export default class WorkspacerExtension extends Extension {
         if (this._capslockActive) {
             this._removeCapslock();
             this._capslockActive = false;
+        }
+    }
+
+    _enableMiddleClickMinimize() {
+        const wmPrefs = new Gio.Settings({ schema: 'org.gnome.desktop.wm.preferences' });
+        this._savedMiddleClick = wmPrefs.get_string('action-middle-click-titlebar');
+        wmPrefs.set_string('action-middle-click-titlebar', 'minimize');
+        wmPrefs.apply();
+        this._wmPrefs = wmPrefs;
+    }
+
+    _disableMiddleClickMinimize() {
+        if (this._wmPrefs) {
+            this._wmPrefs.set_string('action-middle-click-titlebar', this._savedMiddleClick ?? 'none');
+            this._wmPrefs.apply();
+            this._wmPrefs = null;
+            this._savedMiddleClick = null;
         }
     }
 

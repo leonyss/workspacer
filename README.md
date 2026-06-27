@@ -18,8 +18,12 @@ A GNOME Shell extension for switching workspaces and moving windows between them
 | Mod + D | Move window to previous workspace |
 | Mod + F | Move window to next workspace |
 | Mod + E | Cycle windows on current workspace |
+| WinMod + H | Minimize window |
+| WinMod + Q | Close window |
+| Middle click on titlebar | Minimize window |
 
-`Mod` is the modifier key selected in extension preferences (default: Super).
+`Mod` is the modifier key for workspace switching (default: Super).  
+`WinMod` is the modifier key for window actions (default: Super), configurable separately in preferences.
 
 ## Requirements
 
