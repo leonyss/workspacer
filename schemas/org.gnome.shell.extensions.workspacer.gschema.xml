@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.workspacer"
+          path="/org/gnome/shell/extensions/workspacer/">
+    <key type="s" name="modifier-key">
+      <default>'super'</default>
+      <summary>Modifier key</summary>
+      <description>Modifier to hold for workspace actions: 'capslock', 'lshift', 'lalt', 'super'</description>
+    </key>
+    <key type="s" name="window-modifier-key">
+      <default>'super'</default>
+      <summary>Window modifier key</summary>
+      <description>Modifier for close/minimize actions: 'lalt', 'super'</description>
+    </key>
+  </schema>
+</schemalist>
